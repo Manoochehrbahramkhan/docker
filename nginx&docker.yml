@@ -1,0 +1,35 @@
+---
+- name: Install Docker and run Nginx container from local repository
+  hosts: all
+  become: true
+  tasks:
+    - name: Install Docker
+      yum:
+        name: docker
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Log in to local Docker registry
+      community.docker.docker_login:
+        registry: my_registry.local
+        username: my_user
+        password: my_password
+
+    - name: Pull Nginx image from local repository
+      community.docker.docker_image:
+        name: my_registry.local/nginx
+        source: pull
+
+    - name: Run Nginx container
+      community.docker.docker_container:
+        name: nginx_container
+        image: my_registry.local/nginx
+        state: started
+        restart_policy: always
+        ports:
+          - "80:80"
