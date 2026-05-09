@@ -1,0 +1,9 @@
+# tshoot docker version 29 on archive ubuntu
+
+sudo groupadd docker   
+sudo usermod -aG docker bahram   
+newgrp docker   
+docker ps
+
+sudo chown "$USER:$USER" /home/"$USER"/.docker -R
+sudo chmod g+rwx "$HOME/.docker" -R   
